@@ -1,1 +1,78 @@
 
+<!DOCTYPE html>
+<eʼlon lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yurak Animatsiyasi</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: pink;
+      font-family: 'Arial', sans-serif;
+    }
+    .heart {
+      width: 150px;
+      height: 150px;
+      background-color: red;
+      position: relative;
+      transform: rotate(-45deg);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .heart:hover {
+      transform: rotate(-45deg) scale(1.1);
+    }
+    .heart::before,
+    .heart::after {
+      content: '';
+      width: 150px;
+      height: 150px;
+      background-color: red;
+      border-radius: 50%;
+      position: absolute;
+    }
+    .heart::before {
+      top: -75px;
+      left: 0;
+    }
+    .heart::after {
+      left: 75px;
+      top: 0;
+    }
+    .message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      font-size: 24px;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+    .heart.clicked + .message {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="heart"></div>
+  <div class="message">I love you R♥️</div>
+
+  <script>
+    const heart = document.querySelector('.heart');
+    const message = document.querySelector('.message');
+
+    heart.addEventListener('click', () => {
+      heart.classList.toggle('clicked');
+    });
+  </script>
+</body>
+</html>
