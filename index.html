@@ -1,78 +1,157 @@
-
 <!DOCTYPE html>
-<eʼlon lang="en">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yurak Animatsiyasi</title>
+  <title>I Love You</title>
   <style>
     body {
       margin: 0;
       padding: 0;
       height: 100vh;
+      background: linear-gradient(to bottom, #ff9a8b, #ff6a88); /* Iliq ranglar orqa fon */
+      font-family: 'Cursive', 'Arial', sans-serif;
+      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: pink;
-      font-family: 'Arial', sans-serif;
+      transition: background 1s ease; /* Orqa fonni o'zgartirish */
     }
+
+    /* Yurak shakli */
     .heart {
       width: 150px;
       height: 150px;
-      background-color: red;
+      background: radial-gradient(circle, red, #ff6b6b);
       position: relative;
       transform: rotate(-45deg);
       cursor: pointer;
-      transition: transform 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      transition: all 0.5s ease;
     }
+
     .heart:hover {
       transform: rotate(-45deg) scale(1.1);
+      background: radial-gradient(circle, #ff6b6b, #ff4b4b);
     }
+
+    .heart.clicked {
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: rotate(-45deg) scale(1.1);
+        background: radial-gradient(circle, pink, #ff8b8b);
+      }
+      50% {
+        transform: rotate(-45deg) scale(1.3);
+        background: radial-gradient(circle, #ff6b6b, red);
+      }
+    }
+
     .heart::before,
     .heart::after {
       content: '';
       width: 150px;
       height: 150px;
-      background-color: red;
+      background: inherit;
       border-radius: 50%;
       position: absolute;
     }
+
     .heart::before {
       top: -75px;
       left: 0;
     }
+
     .heart::after {
       left: 75px;
       top: 0;
     }
+
+    /* Xabar */
     .message {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0);
-      font-size: 24px;
+      font-size: 30px;
       color: white;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
       opacity: 0;
       transition: all 0.5s ease;
+      text-align: center;
     }
+
     .heart.clicked + .message {
       transform: translate(-50%, -50%) scale(1);
       opacity: 1;
     }
+
+    /* Qor donalari */
+    .snowflake {
+      position: fixed;
+      color: pink;
+      font-size: 1.2em;
+      opacity: 0.8;
+      pointer-events: none;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-10px);
+      }
+      100% {
+        transform: translateY(100vh);
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Qor yog‘ishi uchun konteyner -->
+  <div id="snowflakes"></div>
+
+  <!-- Yurak va xabar -->
   <div class="heart"></div>
-  <div class="message">I love you R♥️</div>
+  <div class="message">
+    <p>I Love You R ♥️</p>
+  </div>
 
   <script>
     const heart = document.querySelector('.heart');
     const message = document.querySelector('.message');
+    const snowflakesContainer = document.getElementById('snowflakes');
+    const body = document.body;
 
+    // Yurak bosilganda mo‘jizakor o‘zgarish
     heart.addEventListener('click', () => {
       heart.classList.toggle('clicked');
+      body.style.background = `linear-gradient(to bottom, #ff6a88, #ff9a8b)`; // Orqa fon rangini o‘zgartirish
+      createSnowflakes(); // Qor donalarini faollashtirish
     });
+
+    // Qor donalarini yaratish funksiyasi
+    function createSnowflakes() {
+      for (let i = 0; i < 50; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.textContent = '❄️';
+
+        // Qor donasining tasodifiy joylashuvi va animatsiya
+        snowflake.style.left = Math.random() * 100 + 'vw'; // Tasodifiy gorizontal joylashuv
+        snowflake.style.animationDuration = Math.random() * 3 + 2 + 's'; // Animatsiya davomiyligi
+        snowflake.style.fontSize = Math.random() * 1.5 + 1 + 'em'; // Kattaligi
+
+        snowflakesContainer.appendChild(snowflake);
+
+        // Qor donalarining vaqt o‘tgach o‘chishi
+        setTimeout(() => {
+          snowflake.remove();
+        }, (Math.random() * 3 + 2) * 1000); // Animatsiya davomiyligi tugagach o‘chadi
+      }
+    }
   </script>
 </body>
 </html>
