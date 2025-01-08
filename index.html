@@ -3,155 +3,291 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>I Love You</title>
+  <title>Matematik O'yin</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      height: 100vh;
-      background: linear-gradient(to bottom, #ff9a8b, #ff6a88); /* Iliq ranglar orqa fon */
-      font-family: 'Cursive', 'Arial', sans-serif;
       overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: background 1s ease; /* Orqa fonni o'zgartirish */
     }
-
-    /* Yurak shakli */
-    .heart {
-      width: 150px;
-      height: 150px;
-      background: radial-gradient(circle, red, #ff6b6b);
-      position: relative;
-      transform: rotate(-45deg);
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-      transition: all 0.5s ease;
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #74ebd5, #9face6);
+      animation: gradient 8s infinite;
     }
-
-    .heart:hover {
-      transform: rotate(-45deg) scale(1.1);
-      background: radial-gradient(circle, #ff6b6b, #ff4b4b);
+    .background.night {
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
     }
-
-    .heart.clicked {
-      animation: pulse 1s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        transform: rotate(-45deg) scale(1.1);
-        background: radial-gradient(circle, pink, #ff8b8b);
+    @keyframes gradient {
+      0% {
+        background-position: 0% 50%;
       }
       50% {
-        transform: rotate(-45deg) scale(1.3);
-        background: radial-gradient(circle, #ff6b6b, red);
-      }
-    }
-
-    .heart::before,
-    .heart::after {
-      content: '';
-      width: 150px;
-      height: 150px;
-      background: inherit;
-      border-radius: 50%;
-      position: absolute;
-    }
-
-    .heart::before {
-      top: -75px;
-      left: 0;
-    }
-
-    .heart::after {
-      left: 75px;
-      top: 0;
-    }
-
-    /* Xabar */
-    .message {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      font-size: 30px;
-      color: white;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-      opacity: 0;
-      transition: all 0.5s ease;
-      text-align: center;
-    }
-
-    .heart.clicked + .message {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-    }
-
-    /* Qor donalari */
-    .snowflake {
-      position: fixed;
-      color: pink;
-      font-size: 1.2em;
-      opacity: 0.8;
-      pointer-events: none;
-      animation: fall linear infinite;
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translateY(-10px);
+        background-position: 100% 50%;
       }
       100% {
-        transform: translateY(100vh);
+        background-position: 0% 50%;
       }
+    }
+    .container {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      margin: 20px auto;
+      width: 90%;
+      max-width: 500px;
+    }
+    .container.night {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+    #timer, #score {
+      margin: 10px 0;
+      font-size: 18px;
+    }
+    .question {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin: 20px 0;
+    }
+    button {
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+    button:hover {
+      transform: scale(1.1);
+    }
+    .operation-button {
+      background-color: #28a745;
+      color: #fff;
+    }
+    .operation-button:hover {
+      background-color: #218838;
+    }
+    .end-button {
+      background-color: #dc3545;
+      color: #fff;
+      grid-column: span 2;
+    }
+    .end-button:hover {
+      background-color: #c82333;
+    }
+    #feedback {
+      font-size: 20px;
+      margin: 10px 0;
+      height: 30px;
+    }
+    #results {
+      margin-top: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #f8f9fa;
+    }
+    .restart-btn {
+      margin-top: 10px;
+      background-color: #007bff;
+      color: #fff;
+    }
+    .restart-btn:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
-  <!-- Qor yog‘ishi uchun konteyner -->
-  <div id="snowflakes"></div>
-
-  <!-- Yurak va xabar -->
-  <div class="heart"></div>
-  <div class="message">
-    <p>I Love You I♥️</p>
+  <div class="background" id="background"></div>
+  <div class="container" id="gameContainer">
+    <h1>Matematik O'yin</h1>
+    <button onclick="toggleTheme()">Kun/Tun rejimi</button>
+    <div id="timer">Vaqt: 120</div>
+    <div id="score">To'g'ri: 0 | Xato: 0</div>
+    <div class="question" id="question"></div>
+    <div class="buttons" id="buttons"></div>
+    <div id="feedback"></div>
+    <button class="end-button" onclick="endGame()">O'yinni tugatish</button>
+    <div>
+      <button class="operation-button" onclick="changeOperation('+')">Qo'shish</button>
+      <button class="operation-button" onclick="changeOperation('-')">Ayirish</button>
+      <button class="operation-button" onclick="changeOperation('*')">Ko'paytirish</button>
+      <button class="operation-button" onclick="changeOperation('/')">Bo'lish</button>
+    </div>
+    <div id="results" style="display:none;">
+      <h2>Xatolar ro'yxati</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Savol</th>
+            <th>Sizning javob</th>
+            <th>To'g'ri javob</th>
+          </tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+      </table>
+      <button class="restart-btn" onclick="restartGame()">O'yinni davom ettirish</button>
+    </div>
   </div>
-
   <script>
-    const heart = document.querySelector('.heart');
-    const message = document.querySelector('.message');
-    const snowflakesContainer = document.getElementById('snowflakes');
-    const body = document.body;
+    let timeLeft = 120;
+    let score = 0;
+    let mistakes = 0;
+    let askedQuestions = new Set();
+    let mistakeDetails = [];
+    let currentOperation = "+";
+    let timer;
+    const timerElement = document.getElementById("timer");
+    const scoreElement = document.getElementById("score");
+    const questionElement = document.getElementById("question");
+    const buttonsElement = document.getElementById("buttons");
+    const feedbackElement = document.getElementById("feedback");
+    const resultsElement = document.getElementById("results");
+    const resultsBody = document.getElementById("resultsBody");
+    const gameContainer = document.getElementById("gameContainer");
+    const background = document.getElementById("background");
 
-    // Yurak bosilganda mo‘jizakor o‘zgarish
-    heart.addEventListener('click', () => {
-      heart.classList.toggle('clicked');
-      body.style.background = `linear-gradient(to bottom, #ff6a88, #ff9a8b)`; // Orqa fon rangini o‘zgartirish
-      createSnowflakes(); // Qor donalarini faollashtirish
-    });
+    function startTimer() {
+      timer = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          timerElement.textContent = `Vaqt: ${timeLeft}`;
+        } else {
+          endGame();
+        }
+      }, 1000);
+    }
 
-    // Qor donalarini yaratish funksiyasi
-    function createSnowflakes() {
-      for (let i = 0; i < 50; i++) {
-        const snowflake = document.createElement('div');
-        snowflake.classList.add('snowflake');
-        snowflake.textContent = '❄️';
+    function toggleTheme() {
+      gameContainer.classList.toggle("night");
+      background.classList.toggle("night");
+    }
 
-        // Qor donasining tasodifiy joylashuvi va animatsiya
-        snowflake.style.left = Math.random() * 100 + 'vw'; // Tasodifiy gorizontal joylashuv
-        snowflake.style.animationDuration = Math.random() * 3 + 2 + 's'; // Animatsiya davomiyligi
-        snowflake.style.fontSize = Math.random() * 1.5 + 1 + 'em'; // Kattaligi
+    function generateQuestion() {
+      let num1, num2, correctAnswer;
+      do {
+        if (currentOperation === "+" || currentOperation === "-") {
+          num1 = Math.floor(Math.random() * 101);
+          num2 = Math.floor(Math.random() * 101);
+        } else {
+          num1 = Math.floor(Math.random() * 10) + 1;
+          num2 = Math.floor(Math.random() * 10) + 1;
+          if (currentOperation === "/") num1 *= num2;
+        }
+        correctAnswer =
+          currentOperation === "+"
+            ? num1 + num2
+            : currentOperation === "-"
+            ? num1 - num2
+            : currentOperation === "*"
+            ? num1 * num2
+            : num1 / num2;
+      } while (askedQuestions.has(`${num1}${currentOperation}${num2}`));
+      askedQuestions.add(`${num1}${currentOperation}${num2}`);
+      questionElement.textContent = `${num1} ${currentOperation} ${num2} = ?`;
+      generateButtons(correctAnswer);
+    }
 
-        snowflakesContainer.appendChild(snowflake);
-
-        // Qor donalarining vaqt o‘tgach o‘chishi
-        setTimeout(() => {
-          snowflake.remove();
-        }, (Math.random() * 3 + 2) * 1000); // Animatsiya davomiyligi tugagach o‘chadi
+    function generateButtons(correctAnswer) {
+      buttonsElement.innerHTML = "";
+      const correctPosition = Math.floor(Math.random() * 4);
+      for (let i = 0; i < 4; i++) {
+        const button = document.createElement("button");
+        button.textContent =
+          i === correctPosition
+            ? correctAnswer
+            : correctAnswer + Math.floor(Math.random() * 20 - 10);
+        button.onclick = () => checkAnswer(Number(button.textContent), correctAnswer);
+        buttonsElement.appendChild(button);
       }
     }
+
+    function checkAnswer(answer, correctAnswer) {
+      if (answer === correctAnswer) {
+        score++;
+        feedbackElement.textContent = "To'g'ri!";
+        feedbackElement.style.color = "green";
+      } else {
+        mistakes++;
+        feedbackElement.textContent = "Xato!";
+        feedbackElement.style.color = "red";
+        mistakeDetails.push({
+          question: questionElement.textContent,
+          yourAnswer: answer,
+          correctAnswer,
+        });
+      }
+      scoreElement.textContent = `To'g'ri: ${score} | Xato: ${mistakes}`;
+      generateQuestion();
+    }
+
+    function endGame() {
+      clearInterval(timer);
+      questionElement.textContent = "";
+      buttonsElement.innerHTML = "";
+      feedbackElement.textContent = "";
+      displayResults();
+    }
+
+    function displayResults() {
+      resultsBody.innerHTML = "";
+      mistakeDetails.forEach((mistake) => {
+        const row = `<tr><td>${mistake.question}</td><td>${mistake.yourAnswer}</td><td>${mistake.correctAnswer}</td></tr>`;
+        resultsBody.innerHTML += row;
+      });
+      resultsElement.style.display = "block";
+    }
+
+    function restartGame() {
+      timeLeft = 120;
+      score = 0;
+      mistakes = 0;
+      askedQuestions.clear();
+      mistakeDetails = [];
+      feedbackElement.textContent = "";
+      resultsElement.style.display = "none";
+      timerElement.textContent = `Vaqt: ${timeLeft}`;
+      scoreElement.textContent = `To'g'ri: ${score} | Xato: ${mistakes}`;
+      generateQuestion();
+      startTimer();
+    }
+
+    function changeOperation(operation) {
+      currentOperation = operation;
+      restartGame();
+    }
+
+    generateQuestion();
+    startTimer();
   </script>
 </body>
 </html>
